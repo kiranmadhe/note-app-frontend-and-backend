@@ -5,7 +5,7 @@ const { body, validationResult } = require('express-validator');
 const { find, findOne } = require('../models/User');
 const bcrypt = require('bcryptjs');     //hash function  password 
 const jwt = require('jsonwebtoken')
-const JWT_SECRATE = "youareawesome"
+const JWT_SECRET = "noteapp"
 
 //  ROUTE 1 CREATE USER
 
@@ -44,14 +44,14 @@ router.post('/createuser', [
       }
     }
 
-    const authtoken = jwt.sign(data, JWT_SECRATE)
+    const authtoken = jwt.sign(data, JWT_SECRET)
     // .then(user => res.json(user))
     // .catch(err => {console.log(err)
     //     res.json({error: 'please enter unique email',
     //     message : err.message
     //   }) //////
     // })  
-    res.json(authtoken)
+    res.json({authtoken})
   } catch (error) {
     console.log(error.mesage);
     res.status(500).json({ errors: "some error occured" });
@@ -74,8 +74,8 @@ router.post('/login',[
 
     }
         //user not exist
-    let user = await User.findOne(( email));
-    if (user) {
+    let user = await User.findOne({ email});
+    if (!user) {
       return res.status(400).json({ errors: "user already exists" });
     }
     const passwordCompare = await bcrypt.compare(password, user.password);
@@ -83,13 +83,19 @@ router.post('/login',[
       return res.status(400).json({ errors: "Login Details are Invalid" });
     }
 
-    const payload  ={
+    const data ={
       user:{
         id: user.id
-      
+      }
     }
 
-    const authtoken = jwt.sign(payload, JWT_SECRATE)
+    const authtoken = jwt.sign(data, JWT_SECRET)
+    // .then(user => res.json(user))
+    // .catch(err => {console.log(err)
+    //     res.json({error: 'please enter unique email',
+    //     message : err.message
+    //   }) //////
+    // })  
     res.json({authtoken})
     
   } catch (error) {
