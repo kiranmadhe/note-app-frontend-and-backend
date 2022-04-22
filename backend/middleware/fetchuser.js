@@ -2,7 +2,7 @@ var jwt = require('jsonwebtoken');
 
 const JWT_SECRET="noteapp"
 
-const fetchuser=('./fetchuser', (req,res, next)=>{
+const fetchuser= (req,res, next)=>{
     const token = req.header('auth-token');
 
     if(!token){
@@ -19,7 +19,7 @@ const fetchuser=('./fetchuser', (req,res, next)=>{
         res.status(500).json({ errors: "some error occured" });
     }
 
-})
+}
 
 
 
