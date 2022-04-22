@@ -6,7 +6,7 @@ const { find, findOne } = require('../models/User');
 const bcrypt = require('bcryptjs');     //hash function  password 
 const jwt = require('jsonwebtoken')
 const JWT_SECRET = "noteapp"
-
+const fetchuser = require('../middleware/fetchuser')
 //  ROUTE 1 CREATE USER
 
 router.post('/createuser', [
@@ -58,7 +58,6 @@ router.post('/createuser', [
   }
 })
 
-
 //ROUTE 2 LOGIN
 
 router.post('/login',[
@@ -97,11 +96,28 @@ router.post('/login',[
     //   }) //////
     // })  
     res.json({authtoken})
-    
   } catch (error) {
     console.log(error.mesage);
     res.status(500).json({ errors: "some error occured" });
   }
 })
+
+
+
+//ROUTE 3 : getuser
+
+router.post('/getuser',fetchuser, async(req, res)=>{
+  try{
+      userId = req.userId
+      const user = User.findById(userId).select("-password");
+      res.send(user);
+  }catch(error){
+    console.log(error.mesage);
+    res.status(500).json({ errors: "some error occured" });
+  }
+})
+
+
+
 
 module.exports = router
