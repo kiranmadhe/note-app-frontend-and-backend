@@ -15,7 +15,7 @@ const fetchuser= (req,res, next)=>{
     next();
 
     }catch (error) {
-        console.log(error.mesage);
+        console.log(error.message);
         res.status(500).json({ errors: "some error occured" });
     }
 

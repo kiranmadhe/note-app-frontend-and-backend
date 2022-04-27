@@ -53,7 +53,7 @@ router.post('/createuser', [
     // })  
     res.json({authtoken})
   } catch (error) {
-    console.log(error.mesage);
+    console.log(error.message);
     res.status(500).json({ errors: "some error occured" });
   }
 })
@@ -73,9 +73,9 @@ router.post('/login',[
 
     }
         //user not exist
-    let user = await User.findOne({ email});
+    let user = await User.findOne({email});
     if (!user) {
-      return res.status(400).json({ errors: "user already exists" });
+      return res.status(400).json({ errors: "user not exists" });
     }
     const passwordCompare = await bcrypt.compare(password, user.password);
     if (!passwordCompare){
@@ -97,7 +97,7 @@ router.post('/login',[
     // })  
     res.json({authtoken})
   } catch (error) {
-    console.log(error.mesage);
+    console.log(error.message);
     res.status(500).json({ errors: "some error occured" });
   }
 })
@@ -108,14 +108,14 @@ router.post('/login',[
 
 router.post('/getuser',fetchuser, async(req, res)=>{
   try{
-      userId = req.userId
+      userId = req.user.id;
       const user = await User.findById(userId).select("-password");
       res.send(user);
   }catch(error){
-    console.log(error.mesage);
+    console.log(error.message);
     res.status(500).json({ errors: "some error occured" });
   }
-})
+});
 
 
 
